@@ -4,7 +4,7 @@ iOS OTA Buddy
 Command line tool to aid in distributing iOS appliactions OTA using the ITMS-protocol (supported by all iOS4 devices and later).
 
 #### Overview
-The easiest way to distribute ad-hoc builds is to download them through Safari, this is supported from iOS4.
+The easiest way to distribute ad-hoc builds is to download them through Safari, this is supported from iOS4. OTA-builds are perfect when you want to distribute to a limited audience, e.g. nightly builds, test builds, debug builds etc.
 After building your application archive (.ipa) and signing it with your ad-hoc distribution provisioning profile you some additional steps to enable OTA distribution.
 
 First of all, you need a web-server or dropbox account to put the files. If you want to use Dropbox, simply put your files in the Public folder and right-click to get the public URL.
