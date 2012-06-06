@@ -1,7 +1,10 @@
 #!/bin/sh
+#
 # Copyright Sveinung Kval Bakken 2012
 # sveinung.bakken@gmail.com
-# Please keep this comment
+#
+# Please keep this comment, but copy and modify anything below as you want.
+# source: https://github.com/sveinungkb/ios-ota-buddy
 
 PLIST_BUDDY="/usr/libexec/PlistBuddy -c"
 
