@@ -11,9 +11,9 @@ PLIST_BUDDY="/usr/libexec/PlistBuddy -c"
 provisioning() 
 {
 	if [ -z "$2" ]; then
-		unzip -p $1 "**.mobileprovision"
+		unzip -p "$1" "**.mobileprovision"
 	else
-		unzip -p $1 "**.mobileprovision" > $2
+		unzip -p "$1" "**.mobileprovision" > $2
 		echo $"Extracted the .mobileprovison in $1 to: $2"
 	fi
 }
@@ -37,8 +37,8 @@ otaplist()
 		# Extract IPA-files
 		APP_PLIST=temp.plist
 		OTA_PLIST=$3
-		unzip -p $1 "**Info.plist" > $APP_PLIST
-	
+		unzip -p "$1" "**/Info.plist" > $APP_PLIST
+
 		#Read contents
 		BUNDLE_IDENTIFIER=$($PLIST_BUDDY "Print CFBundleIdentifier" $APP_PLIST)
 		BUNDLE_NAME=$($PLIST_BUDDY "Print CFBundleName" $APP_PLIST)
@@ -100,13 +100,13 @@ fi
 
 case "$1" in
 		provisioning)
-			provisioning $2 $3
+			provisioning "$2" "$3"
 			;;
 		plist)
-			otaplist $2 $3 $4
+			otaplist "$2" "$3" "$4"
 			;;
 		itms)
-			itms $2
+			itms "$2"
 			;;
 		*)
 			printusage
