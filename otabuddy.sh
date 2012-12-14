@@ -41,18 +41,17 @@ otaplist()
 
 		#Read contents
 		BUNDLE_IDENTIFIER=$($PLIST_BUDDY "Print CFBundleIdentifier" $APP_PLIST)
-		BUNDLE_NAME=$($PLIST_BUDDY "Print CFBundleName" $APP_PLIST)
+		BUNDLE_NAME=$($PLIST_BUDDY "Print CFBundleDisplayName" $APP_PLIST)
 
 		# Clean up
 		rm $APP_PLIST
 	
 		# Create .plist
 		$PLIST_BUDDY "Add :items array" $OTA_PLIST
-		$PLIST_BUDDY "Add :items:0:metadata array" $OTA_PLIST
-		$PLIST_BUDDY "Add :items:0:metadata:0 dict" $OTA_PLIST
-		$PLIST_BUDDY "Add :items:0:metadata:0:bundle-identifier string $BUNDLE_IDENTIFIER" $OTA_PLIST
-		$PLIST_BUDDY "Add :items:0:metadata:0:title string $BUNDLE_NAME" $OTA_PLIST
-		$PLIST_BUDDY "Add :items:0:metadata:0:kind string software" $OTA_PLIST
+		$PLIST_BUDDY "Add :items:0:metadata dict" $OTA_PLIST
+		$PLIST_BUDDY "Add :items:0:metadata:bundle-identifier string $BUNDLE_IDENTIFIER" $OTA_PLIST
+		$PLIST_BUDDY "Add :items:0:metadata:title string $BUNDLE_NAME" $OTA_PLIST
+		$PLIST_BUDDY "Add :items:0:metadata:kind string software" $OTA_PLIST
 		$PLIST_BUDDY "Add :items:0:assets array" $OTA_PLIST
 		$PLIST_BUDDY "Add :items:0:assets:0 dict" $OTA_PLIST
 		$PLIST_BUDDY "Add :items:0:assets:0:kind string software-package" $OTA_PLIST
