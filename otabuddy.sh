@@ -8,7 +8,7 @@
 
 PLIST_BUDDY="/usr/libexec/PlistBuddy -c"
 
-provisioning() 
+provisioning()
 {
 	if [ -z "$2" ]; then
 		unzip -p "$1" "**.mobileprovision"
@@ -37,7 +37,10 @@ otaplist()
 		# Extract IPA-files
 		APP_PLIST=temp.plist
 		OTA_PLIST=$3
-		unzip -p "$1" "**/Info.plist" > $APP_PLIST
+		echo $1
+		echo $OTA_PLIST
+
+		unzip -p "$1" "**.app/Info.plist" > $APP_PLIST
 
 		#Read contents
 		BUNDLE_IDENTIFIER=$($PLIST_BUDDY "Print CFBundleIdentifier" $APP_PLIST)
@@ -45,7 +48,7 @@ otaplist()
 
 		# Clean up
 		rm $APP_PLIST
-	
+
 		# Create .plist
 		$PLIST_BUDDY "Add :items array" $OTA_PLIST
 		$PLIST_BUDDY "Add :items:0:metadata dict" $OTA_PLIST
@@ -56,12 +59,25 @@ otaplist()
 		$PLIST_BUDDY "Add :items:0:assets:0 dict" $OTA_PLIST
 		$PLIST_BUDDY "Add :items:0:assets:0:kind string software-package" $OTA_PLIST
 		$PLIST_BUDDY "Add :items:0:assets:0:url string $2" $OTA_PLIST
-		
+
 		echo "Created $OTA_PLIST with values:"
 		echo "Bundle identifier: $BUNDLE_IDENTIFIER"
 		echo "Title:             $BUNDLE_NAME"
 		echo "URL to app:        $2"
 	fi
+}
+
+otaplists()
+{
+	echo "Cleaning up old .plists"
+	rm -f *.plist
+	for ipa in *.ipa; do
+		name="${ipa%.*}"
+		url="${1}/${ipa}"
+		file="${name}.plist"
+		otaplist $ipa $url $file
+		itms "${1}/${file}"
+	done
 }
 
 itms()
@@ -87,6 +103,8 @@ printusage()
 	echo ""
 	echo $"$0 plist: Will generate the .plist required for OTA-distribution"
 	echo $" $0 plist file.ipa http://domain.com/path/distribution/file.ipa application.plist"
+	echo $"$0 plists: Same as above, but will process the entire directory. Provide common URL prefix:"
+	echo $" $0 plists http://domain.com/path/distribution/"
 	echo ""
 	echo $"$0 itms: Will generate an itms-services link that can be used to download your application."
 	echo $" $0 itms http://domain.com/path/distribution/application.plist"
@@ -104,10 +122,13 @@ case "$1" in
 		plist)
 			otaplist "$2" "$3" "$4"
 			;;
+		plists)
+			otaplists "$2"
+			;;
 		itms)
 			itms "$2"
 			;;
 		*)
 			printusage
-			
+
 esac
